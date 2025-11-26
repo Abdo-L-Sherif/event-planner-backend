@@ -1,29 +1,18 @@
 package database
 
 import (
-<<<<<<< HEAD
-	"gorm.io/driver/sqlite"
-=======
 	"fmt"
 	"log"
 	"os"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
->>>>>>> 6bafcd2 (Replace SQLite setup with mysql)
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
 func ConnectDatabase() {
-<<<<<<< HEAD
-	database, err := gorm.Open(sqlite.Open("users.db"), &gorm.Config{})
-	if err != nil {
-		panic("Database couldn't connect")
-	}
-
-=======
 
 	err := godotenv.Load()
 	if err != nil {
@@ -45,6 +34,5 @@ func ConnectDatabase() {
 	}
 
 	fmt.Println("Connected to database sucessfully")
->>>>>>> 6bafcd2 (Replace SQLite setup with mysql)
 	DB = database
 }
