@@ -7,13 +7,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func EventRoutes(router *gin.Engine) {
-	event := router.Group("/events")
-	event.Use(middleware.AuthMiddleware())
+func EventRoutes(r *gin.Engine) {
+	events := r.Group("/events")
+	events.Use(middleware.AuthMiddleware()) // Protect all event routes
+	{
+		events.POST("/", controllers.CreateEvent)
+		events.GET("/organized", controllers.GetOrganizedEvents)
+		events.GET("/invited", controllers.GetInvitedEvents)
+		events.DELETE("/:id", controllers.DeleteEvent)
+		events.POST("/:id/invite", controllers.InviteUserToEvent)
 
-	event.POST("/", controllers.CreateEvent)
-	event.GET("/organized", controllers.GetOrganizedEvents)
-	event.GET("/invited", controllers.GetInvitedEvents)
-	event.POST("/:id/invite", controllers.InviteUserToEvent)
-	event.DELETE("/:id", controllers.DeleteEvent)
+		// NEW ROUTES
+		events.GET("/search", controllers.SearchEvents)
+		events.GET("/:id", controllers.GetEventById)
+		events.POST("/:id/rsvp", controllers.RSVPEvent)
+	}
 }
