@@ -13,10 +13,11 @@ import (
 var DB *gorm.DB
 
 func ConnectDatabase() {
-
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("err loading env file: %v", err)
+	if os.Getenv("APP_ENV") != "production" {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatalf("err loading env file: %v", err)
+		}
 	}
 
 	dbUser := os.Getenv("DB_USER")
