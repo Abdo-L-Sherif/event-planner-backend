@@ -9,7 +9,7 @@ import (
 
 func EventRoutes(r *gin.RouterGroup) {
 	events := r.Group("/events")
-	events.Use(middleware.AuthMiddleware()) // Protect all event routes
+	// events.Use(middleware.AuthMiddleware()) // Protect all event routes
 	{
 		events.POST("/", controllers.CreateEvent)
 		events.GET("/organized", controllers.GetOrganizedEvents)
