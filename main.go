@@ -16,28 +16,25 @@ func main() {
 	// --- CORS CONFIGURATION ---
 	// ... (Your existing CORS config) ...
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:[]string{
-			"http://localhost:4200", 
-			"https://event-planner-frontend-production-c144.up.railway.app",
-		},
-		// ... rest of CORS
+		AllowOrigins:     []string{"http://localhost:4200",
+								  "https://event-planner-frontend-production-c144.up.railway.app",},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
 	}))
 
 	database.ConnectDatabase()
 	database.DB.AutoMigrate(&models.User{}, &models.Event{}, &models.EventParticipant{})
 
-	// 1. 🚀 PUBLIC ROUTES (UNPROTECTED)
-	// These routes are open to everyone
 	r.POST("/register", routes.Signup)
 	r.POST("/login", routes.Login)
 
-    // 2. 🔒 PROTECTED ROUTES
-    // Create a new group for authenticated access.
+    
     protected := r.Group("/")
-    protected.Use(middleware.AuthMiddleware()) // Apply AuthMiddleware only to this group
+    protected.Use(middleware.AuthMiddleware()) 
     {
-        // Now, add the Event Routes using the protected group:
-        // *** CRITICAL CHANGE HERE: Pass the protected group, not the main router 'r' ***
         routes.EventRoutes(protected) 
     }
 
