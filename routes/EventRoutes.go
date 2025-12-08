@@ -2,7 +2,6 @@ package routes
 
 import (
 	"go-auth-api/controllers"
-	"go-auth-api/middleware"
 
 	"github.com/gin-gonic/gin"
 )
