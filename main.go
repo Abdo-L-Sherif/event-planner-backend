@@ -13,15 +13,22 @@ import (
 func main() {
 	r := gin.Default()
 
-	// 1. Fixed the "DELET" typo to "DELETE"
+	// --- CORS CONFIGURATION ---
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:4200"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
-		ExposeHeaders:    []string{"Content-Length"},
+		// *** CRITICAL FIX: ADD YOUR LIVE FRONTEND URL HERE ***
+		// You must replace the placeholder with the HTTPS URL provided by Railway 
+		// for your event-planner-frontend service (e.g., https://my-app-xxxx.railway.app).
+		AllowOrigins:     []string{
+			"http://localhost:4200", // Keep for local development
+			"https://event-planner-frontend-production-c144.up.railway.app", // <--- REPLACE THIS PLACEHOLDER
+		},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
+		MaxAge:           12 * time.Hour,
 	}))
+	// --- END CORS CONFIGURATION ---
 
 	database.ConnectDatabase()
 
@@ -32,8 +39,6 @@ func main() {
 	r.POST("/login", routes.Login)
 
 	// 3. Register the Event Routes (This enables /events URLs)
-	// Note: I am assuming the function is named 'EventRoutes' based on your file list.
-	// If this line causes an error, check the function name inside routes/EventRoutes.go
 	routes.EventRoutes(r)
 
 	r.Run(":8080")
