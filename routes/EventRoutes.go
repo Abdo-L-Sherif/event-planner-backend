@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func EventRoutes(r *gin.Engine) {
+func EventRoutes(r *gin.RouterGroup) {
 	events := r.Group("/events")
 	events.Use(middleware.AuthMiddleware()) // Protect all event routes
 	{
