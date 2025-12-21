@@ -14,7 +14,7 @@ RUN go mod download
 COPY . .
 
 # Build statically linked binary
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o app
+RUN go build -o main .
 
 
 # =========================
@@ -41,3 +41,4 @@ EXPOSE 8080
 USER 1001
 
 CMD ["/app/app"]
+
