@@ -1,31 +1,43 @@
-# Stage 1: Build the application
+# =========================
+# Stage 1: Build
+# =========================
 FROM golang:1.24-alpine AS builder
 
-# Set the working directory
 WORKDIR /app
 
-# Copy dependency files
-COPY go.mod go.sum ./
+# Install build dependencies
+RUN apk add --no-cache git
 
-# Download dependencies
+COPY go.mod go.sum ./
 RUN go mod download
 
-# Copy the source code
 COPY . .
 
-# Build the Go app
-RUN go build -o main .
+# Build statically linked binary
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o app
 
-# Stage 2: Run the application (Lightweight image)
-FROM alpine:latest
 
-WORKDIR /root/
+# =========================
+# Stage 2: Runtime
+# =========================
+FROM alpine:3.20
 
-# Copy the binary from the builder stage
-COPY --from=builder /app/main .
+# Install CA certs for HTTPS
+RUN apk add --no-cache ca-certificates
 
-# Expose the port
+# Create app directory that random UID can access
+WORKDIR /app
+
+# Copy binary
+COPY --from=builder /app/app /app/app
+
+# Make sure it's executable
+RUN chmod 755 /app/app
+
+# OpenShift-friendly port
 EXPOSE 8080
 
-# Command to run the executable
-CMD ["./main"]
+# Run as non-root (OpenShift will override UID anyway)
+USER 1001
+
+CMD ["/app/app"]
