@@ -2,13 +2,17 @@ package middleware
 
 import (
 	"net/http"
+<<<<<<< HEAD
 	"os"
+=======
+>>>>>>> 15fa3d9ca933de6a2f9567693bff307b392c5d8c
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
 
+<<<<<<< HEAD
 var jwtSecret = []byte(getJWTSecret())
 
 func getJWTSecret() string {
@@ -19,6 +23,9 @@ func getJWTSecret() string {
 	}
 	return secret
 }
+=======
+var jwtSecret = []byte("supersecretkey")
+>>>>>>> 15fa3d9ca933de6a2f9567693bff307b392c5d8c
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {

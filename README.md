@@ -23,6 +23,7 @@ This is the REST API for the EventPlanner application, built with Go (Golang), G
     ```
 
 2.  **Setup the Database:**
+<<<<<<< HEAD
     * For **development**: The app defaults to SQLite with a local `users.db` file.
     * For **production/OpenShift**: Use MySQL with environment variables.
     * Create a `.env` file in the root directory with your credentials:
@@ -36,12 +37,22 @@ This is the REST API for the EventPlanner application, built with Go (Golang), G
 
         # Database Configuration
         DB_TYPE=mysql  # or 'sqlite' for development
+=======
+    * Create a MySQL database named `eventplanner`.
+    * Create a `.env` file in the root directory with your credentials:
+        ```env
+        PORT=8080
+        JWT_SECRET=supersecretkey
+>>>>>>> 15fa3d9ca933de6a2f9567693bff307b392c5d8c
         DB_USER=root
         DB_PASSWORD=your_password
         DB_NAME=eventplanner
         DB_HOST=127.0.0.1
         DB_PORT=3306
+<<<<<<< HEAD
         DB_PATH=users.db  # Only used for SQLite
+=======
+>>>>>>> 15fa3d9ca933de6a2f9567693bff307b392c5d8c
         ```
 
 3.  **Run the Server:**
@@ -49,6 +60,7 @@ This is the REST API for the EventPlanner application, built with Go (Golang), G
     go mod tidy
     go run main.go
     ```
+<<<<<<< HEAD
     The server will start on the configured port (default: `http://localhost:8080`).
 
 ## 🚀 OpenShift Deployment
@@ -86,6 +98,9 @@ The application provides health check endpoints for OpenShift probes:
 - Non-root user execution
 - Multi-stage Docker build for optimized image size
 - Database connection retry logic
+=======
+    The server will start on `http://localhost:8080`.
+>>>>>>> 15fa3d9ca933de6a2f9567693bff307b392c5d8c
 
 ## 📡 API Endpoints
 

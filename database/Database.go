@@ -4,22 +4,33 @@ import (
 	"fmt"
 	"log"
 	"os"
+<<<<<<< HEAD
 	"time"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
+=======
+
+	"github.com/joho/godotenv"
+	"gorm.io/driver/mysql"
+>>>>>>> 15fa3d9ca933de6a2f9567693bff307b392c5d8c
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
 func ConnectDatabase() {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 15fa3d9ca933de6a2f9567693bff307b392c5d8c
 	err := godotenv.Load()
 	if err != nil {
 		log.Println("Note: .env file not found, using system environment variables")
 	}
 
+<<<<<<< HEAD
 	dbType := os.Getenv("DB_TYPE")
 	if dbType == "" {
 		dbType = "mysql" // Default to MySQL for OpenShift compatibility
@@ -96,3 +107,22 @@ func getEnvWithDefault(key, defaultValue string) string {
 	}
 	return defaultValue
 }
+=======
+	dbUser := os.Getenv("DB_USER")
+	dbPass := os.Getenv("DB_PASSWORD")
+	dbName := os.Getenv("DB_NAME")
+	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
+
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		dbUser, dbPass, dbHost, dbPort, dbName)
+
+	database, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("Database couldn't connect: %v", err)
+	}
+
+	fmt.Println("Connected to database sucessfully")
+	DB = database
+}
+>>>>>>> 15fa3d9ca933de6a2f9567693bff307b392c5d8c

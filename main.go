@@ -1,6 +1,7 @@
 package main
 
 import (
+<<<<<<< HEAD
 	"context"
 	"go-auth-api/database"
 	"go-auth-api/models"
@@ -12,6 +13,11 @@ import (
 	"strconv"
 	"strings"
 	"syscall"
+=======
+	"go-auth-api/database"
+	"go-auth-api/models"
+	"go-auth-api/routes"
+>>>>>>> 15fa3d9ca933de6a2f9567693bff307b392c5d8c
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -22,6 +28,7 @@ func main() {
 	r := gin.Default()
 
 	// 1. Fixed the "DELET" typo to "DELETE"
+<<<<<<< HEAD
 	// Configure CORS with environment-based origins
 	corsOrigins := os.Getenv("CORS_ORIGINS")
 	if corsOrigins == "" {
@@ -37,6 +44,10 @@ func main() {
 
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     origins,
+=======
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+>>>>>>> 15fa3d9ca933de6a2f9567693bff307b392c5d8c
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -57,6 +68,7 @@ func main() {
 	// If this line causes an error, check the function name inside routes/EventRoutes.go
 	routes.EventRoutes(r)
 
+<<<<<<< HEAD
 	// Health check endpoints for OpenShift probes
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -124,4 +136,7 @@ func main() {
 	}
 
 	log.Println("Server exited")
+=======
+	r.Run(":8080")
+>>>>>>> 15fa3d9ca933de6a2f9567693bff307b392c5d8c
 }
