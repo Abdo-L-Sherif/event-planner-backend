@@ -1,6 +1,8 @@
 # =========================
 # Stage 1: Build
 # =========================
+# NOTE: If builds fail with "signal: killed", increase Docker memory limit:
+# docker build --memory=2g --memory-swap=4g -t your-app .
 FROM golang:1.24-alpine AS builder
 
 WORKDIR /app
@@ -15,6 +17,11 @@ ENV CGO_ENABLED=0
 ENV GOOS=linux
 ENV GOARCH=amd64
 
+# Set Go memory limits to prevent OOM kills
+ENV GOGC=25
+ENV GOMAXPROCS=1
+ENV GOFLAGS=-p=1
+
 # Copy dependency files first for better layer caching
 COPY go.mod go.sum ./
 
@@ -25,14 +32,10 @@ RUN --mount=type=cache,target=/go/pkg/mod \
 # Copy source code
 COPY . .
 
-# Build static binary with optimizations
-# -w: omit DWARF symbol table
-# -s: omit symbol table and debug information
-# -trimpath: remove file system paths from binary
-RUN --mount=type=cache,target=/root/.cache/go-build \
-    go build \
-    -ldflags="-w -s" \
-    -trimpath \
+# Build binary with minimal memory usage
+# Use simpler flags to avoid memory-intensive optimizations
+RUN go build \
+    -ldflags="-s" \
     -o app .
 
 
