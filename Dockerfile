@@ -54,8 +54,8 @@ WORKDIR /app
 # Copy binary
 COPY --from=builder /app/app /app/app
 
-# Copy .env file if it exists (optional)
-COPY --from=builder /app/.env* /app/
+# Note: .env files are not copied to avoid baking secrets into the image
+# Environment variables should be set in OpenShift deployment configuration
 
 
 # Ensure executable permissions
