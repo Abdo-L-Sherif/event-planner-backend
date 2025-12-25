@@ -5,15 +5,35 @@ FROM golang:1.24-alpine AS builder
 
 WORKDIR /app
 
-RUN apk add --no-cache git
+# Install build dependencies
+RUN apk add --no-cache git ca-certificates tzdata
 
+# Enable Go module proxy and sum database for faster downloads
+ENV GOPROXY=https://proxy.golang.org,direct
+ENV GOSUMDB=sum.golang.org
+ENV CGO_ENABLED=0
+ENV GOOS=linux
+ENV GOARCH=amd64
+
+# Copy dependency files first for better layer caching
 COPY go.mod go.sum ./
-RUN go mod download
 
+# Download dependencies (cached if go.mod/go.sum unchanged)
+RUN --mount=type=cache,target=/go/pkg/mod \
+    go mod download && go mod verify
+
+# Copy source code
 COPY . .
 
-# Build static binary
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o app
+# Build static binary with optimizations
+# -w: omit DWARF symbol table
+# -s: omit symbol table and debug information
+# -trimpath: remove file system paths from binary
+RUN --mount=type=cache,target=/root/.cache/go-build \
+    go build \
+    -ldflags="-w -s" \
+    -trimpath \
+    -o app .
 
 
 # =========================
