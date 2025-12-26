@@ -13,7 +13,7 @@ RUN apk add --no-cache git ca-certificates tzdata
 # Enable Go module proxy and sum database for faster downloads
 ENV GOPROXY=https://proxy.golang.org,direct
 ENV GOSUMDB=sum.golang.org
-ENV CGO_ENABLED=0
+ENV CGO_ENABLED=1
 ENV GOOS=linux
 ENV GOARCH=amd64
 
@@ -78,3 +78,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 
 
 CMD ["/app/app"]
+
